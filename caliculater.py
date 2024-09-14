@@ -23,10 +23,10 @@ def create_button_frame(root):
         button.grid(row=i // 3, column=i % 3, padx=5, pady=5)
         buttons.append(button)
 
-    operators = ["+", "-", "*", "/", "^", "sin", "cos", "tan"]
+    operators = ["+", "-", "*", "/", "^", "sin", "cos", "tan", "(", ")"]
     for i, op in enumerate(operators):
         button = ttk.Button(button_frame, text=op, width=5)
-        button.grid(row=i, column=3, padx=5, pady=5)
+        button.grid(row=i // 2, column=3 + i % 2, padx=5, pady=5)
         buttons.append(button)
 
     equal_button = ttk.Button(button_frame, text="=", width=11)
@@ -49,7 +49,7 @@ def create_gui(root):
 
     def button_click(number):
         current = entry.get()
-        entry.delete(0, END) # type: ignore
+        entry.delete(0, END) 
         entry.insert(0, str(current) + str(number))
 
     def button_clear():
@@ -77,7 +77,7 @@ def create_gui(root):
     for button in buttons:
         if button.cget("text").isdigit():
             button.config(command=lambda btn=button: button_click(int(btn.cget("text"))))
-        elif button.cget("text") in ["+", "-", "*", "/", "^", "sin", "cos", "tan"]:
+        elif button.cget("text") in ["+", "-", "*", "/", "^", "sin", "cos", "tan", "(", ")"]:
             button.config(command=lambda btn=button: button_click(btn.cget("text")))
         elif button.cget("text") == "=":
             button.config(command=button_equal)
@@ -86,9 +86,14 @@ def create_gui(root):
         elif button.cget("text") == "Graph":
             button.config(command=button_graph)
 
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+    window_width = int(screen_width * 0.8)
+    window_height = int(screen_height * 0.8)
+    root.geometry(f"{window_width}x{window_height}")
+
 root = tk.Tk()
 root.title("Simple Calculator with 3D Graphics")
-root.geometry("250x350")
 
 create_gui(root)
 
